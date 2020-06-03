@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>EQUIPOS_ORDENESS_GET_ENTITYSET</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: EQUIPOS_ORDENESS_GET_ENTITYSET</h2>
+<h3> Description: Redefined: Related EntitySet Name: Equipos_ordenesSet</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+**************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;Method&nbsp;attributes.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************************<br />
+   </div>
+   <div class="code">
+Instantiation: Protected<br />
+   </div>
+   <div class="codeComment">
+**************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;METHOD&nbsp;equipos_ordeness_get_entityset.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;lv_equipment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;equnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_obtyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;jsto-obtyp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_stsma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;jsto-stsma,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_stonr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tj30-stonr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_general_exp&nbsp;&nbsp;TYPE&nbsp;bapi_itob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_specific_exp&nbsp;TYPE&nbsp;bapi_itob_eq_only.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TRY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_key_tab&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_key_tab&gt;)&nbsp;WITH&nbsp;KEY&nbsp;name&nbsp;=&nbsp;'Equipment'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_equipment&nbsp;=&nbsp;&lt;fs_key_tab&gt;-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_EQUI_GETDETAIL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;equipment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_equipment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_general_exp&nbsp;&nbsp;=&nbsp;wa_general_exp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_specific_exp&nbsp;=&nbsp;wa_specific_exp.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;tplnr,pltxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;iflo&nbsp;&nbsp;&nbsp;"&nbsp;Ubicación&nbsp;técnica&nbsp;(vista)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;@DATA(wa_iflo)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;tplnr&nbsp;=&nbsp;@wa_specific_exp-read_floc&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spras&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DATA(lv_pltxt)&nbsp;=&nbsp;&nbsp;wa_iflo-pltxt.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;fh~equnr&nbsp;,&nbsp;fh~iloan,&nbsp;fk~auart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fk~autyp,&nbsp;fk~sdate&nbsp;,&nbsp;fk~aufnr,&nbsp;fk~ktext<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;afih&nbsp;AS&nbsp;fh<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;aufk&nbsp;AS&nbsp;fk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;fh~aufnr&nbsp;=&nbsp;fk~aufnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(lt_ordenes)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;fh~equnr&nbsp;=&nbsp;@lv_equipment.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_ordenes&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_ordenes&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'OR'&nbsp;&lt;fs_ordenes&gt;-aufnr&nbsp;INTO&nbsp;DATA(lv_objnr).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'STATUS_READ'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;objnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_objnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only_active&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obtyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_obtyp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stsma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_stsma<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stonr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_stonr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_stsma&nbsp;EQ&nbsp;'I0045'&nbsp;OR&nbsp;lv_stsma&nbsp;EQ&nbsp;'I0046'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;INITIAL&nbsp;LINE&nbsp;TO&nbsp;et_entityset&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_out&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-equipment&nbsp;=&nbsp;&lt;fs_ordenes&gt;-equnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-descript&nbsp;=&nbsp;&nbsp;wa_general_exp-descript.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ubicacion&nbsp;=&nbsp;wa_specific_exp-read_floc.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-ubicacion_txt&nbsp;=&nbsp;lv_pltxt.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-auart&nbsp;=&nbsp;&lt;fs_ordenes&gt;-auart.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-aufnr&nbsp;=&nbsp;&lt;fs_ordenes&gt;-aufnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;fs_out&gt;-auftext&nbsp;=&nbsp;&lt;fs_ordenes&gt;-ktext.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;/iwbep/cx_mgw_busi_exception&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;/iwbep/cx_mgw_tech_exception&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDTRY.<br />
+&nbsp;&nbsp;ENDMETHOD.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2020. Sap Release 753</td>
+   </tr>
+</table>
+</body>
+</html>

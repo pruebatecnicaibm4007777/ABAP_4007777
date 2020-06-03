@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>EQUIPOSSET_GET_ENTITY</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: EQUIPOSSET_GET_ENTITY</h2>
+<h3> Description: Redefined: Related EntitySet Name: EquiposSet</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+**************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;Method&nbsp;attributes.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************************<br />
+   </div>
+   <div class="code">
+Instantiation: Protected<br />
+   </div>
+   <div class="codeComment">
+**************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;method&nbsp;EQUIPOSSET_GET_ENTITY.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:wa_general_exp	&nbsp;TYPE	bapi_itob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_specific_exp&nbsp;TYPE	bapi_itob_eq_only,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_equipment&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;bapi_itob_parms-equipment,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;&nbsp;jstat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;j_txt30,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_status_l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;j_txt04,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sys_status&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi_itob_status,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_user_status&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi_itob_status.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_key_tab&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_key_tab&gt;)&nbsp;WITH&nbsp;KEY&nbsp;name&nbsp;=&nbsp;'Equipment'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_equipment&nbsp;=&nbsp;&lt;fs_key_tab&gt;-value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_EQUI_GETDETAIL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;equipment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_equipment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_general_exp&nbsp;&nbsp;=&nbsp;wa_general_exp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_specific_exp&nbsp;=&nbsp;wa_specific_exp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_entity-equipment&nbsp;=&nbsp;lv_equipment.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;er_entity-descript&nbsp;&nbsp;&nbsp;=&nbsp;wa_general_exp-descript.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;endmethod.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2020. Sap Release 753</td>
+   </tr>
+</table>
+</body>
+</html>

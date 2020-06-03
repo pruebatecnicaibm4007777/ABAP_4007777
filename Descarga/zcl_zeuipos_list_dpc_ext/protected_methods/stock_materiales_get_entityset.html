@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>STOCK_MATERIALES_GET_ENTITYSET</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: STOCK_MATERIALES_GET_ENTITYSET</h2>
+<h3> Description: Redefined: Redefined: Related EntitySet Name: Equipos_ordene</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+**************************************************************************<br />
+*&nbsp;&nbsp;&nbsp;Method&nbsp;attributes.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<br />
+**************************************************************************<br />
+   </div>
+   <div class="code">
+Instantiation: Protected<br />
+   </div>
+   <div class="codeComment">
+**************************************************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;METHOD&nbsp;stock_materiales_get_entityset.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:&nbsp;it_lines&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi_mrp_ind_lines,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset&nbsp;TYPE&nbsp;zest_stock,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;bapi_mrp_mat_param-plant,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_material&nbsp;&nbsp;TYPE&nbsp;&nbsp;bapi_mrp_mat_param-material.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Consulta&nbsp;de&nbsp;materiales<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;t1~matnr,t1~meins,t2~werks,t2~lgort,t3~maktx<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;mara&nbsp;AS&nbsp;t1&nbsp;INNER&nbsp;JOIN&nbsp;mard&nbsp;AS&nbsp;t2&nbsp;ON&nbsp;t1~matnr&nbsp;=&nbsp;t2~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;makt&nbsp;AS&nbsp;t3&nbsp;ON&nbsp;t1~matnr&nbsp;=&nbsp;t3~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@DATA(it_mat)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;t1~mtart&nbsp;=&nbsp;'RCAM'&nbsp;AND<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t3~spras&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_mat&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_mat&gt;).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bapis&nbsp;de&nbsp;stock<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_plant&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_mat&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_material&nbsp;=&nbsp;&lt;fs_mat&gt;-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'BAPI_MATERIAL_STOCK_REQ_LIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;material&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_material<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mrp_ind_lines&nbsp;=&nbsp;it_lines.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_lines&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_line&gt;)&nbsp;WHERE&nbsp;mrp_elemnt&nbsp;=&nbsp;'Stock'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-matnr&nbsp;=&nbsp;&lt;fs_mat&gt;-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-maktx&nbsp;=&nbsp;&lt;fs_mat&gt;-maktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-labst&nbsp;=&nbsp;&lt;fs_line&gt;-rec_reqd_qty.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-meins&nbsp;=&nbsp;&lt;fs_mat&gt;-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-lgort&nbsp;=&nbsp;&lt;fs_mat&gt;-lgort.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_entityset-werks&nbsp;=&nbsp;&lt;fs_mat&gt;-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_entityset&nbsp;TO&nbsp;et_entityset.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDMETHOD.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2020. Sap Release 753</td>
+   </tr>
+</table>
+</body>
+</html>
